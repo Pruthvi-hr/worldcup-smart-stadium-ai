@@ -1,0 +1,290 @@
+{
+  "stadium": {
+    "name": "MetLife Stadium",
+    "city": "New York / New Jersey",
+    "hostCountry": "USA",
+    "capacity": 82500,
+    "currentAttendance": 79200,
+    "overallOccupancyPercent": 96,
+    "matchEvent": {
+      "stage": "Group Stage",
+      "group": "Group B",
+      "home": "USA",
+      "away": "Brazil",
+      "kickoff": "17:00",
+      "currentMinute": 67,
+      "status": "live",
+      "score": "USA 2 - 1 Brazil"
+    },
+    "weather": {
+      "temperatureC": 22,
+      "condition": "Partly cloudy",
+      "humidity": 58,
+      "windKmh": 14
+    }
+  },
+  "gates": [
+    {
+      "id": "gate-a",
+      "name": "Gate A — North",
+      "congestionPercent": 78,
+      "status": "busy",
+      "capacity": 12000,
+      "currentLoad": 9360,
+      "avgEntryWaitMin": 6,
+      "openTurnstiles": 10,
+      "totalTurnstiles": 12,
+      "recommended": false,
+      "notes": "Steady flow. No immediate delays."
+    },
+    {
+      "id": "gate-b",
+      "name": "Gate B — East",
+      "congestionPercent": 92,
+      "status": "critical",
+      "capacity": 9500,
+      "currentLoad": 8740,
+      "avgEntryWaitMin": 18,
+      "openTurnstiles": 8,
+      "totalTurnstiles": 8,
+      "recommended": false,
+      "notes": "Critical congestion. Redirect fans to Gate C or Gate D."
+    },
+    {
+      "id": "gate-c",
+      "name": "Gate C — South",
+      "congestionPercent": 45,
+      "status": "calm",
+      "capacity": 12000,
+      "currentLoad": 5400,
+      "avgEntryWaitMin": 3,
+      "openTurnstiles": 12,
+      "totalTurnstiles": 12,
+      "recommended": true,
+      "notes": "Best entry point. Shortest wait time."
+    },
+    {
+      "id": "gate-d",
+      "name": "Gate D — West",
+      "congestionPercent": 61,
+      "status": "busy",
+      "capacity": 10000,
+      "currentLoad": 6100,
+      "avgEntryWaitMin": 7,
+      "openTurnstiles": 10,
+      "totalTurnstiles": 10,
+      "recommended": true,
+      "notes": "Good alternative to Gate B. Moderate wait."
+    }
+  ],
+  "medical": [
+    {
+      "id": "first-aid-l1",
+      "name": "First Aid Station — Concourse Level 1",
+      "location": "Section 112, behind Block 112",
+      "type": "first-aid",
+      "staffed": true,
+      "medicalPersonnel": 4,
+      "ambulanceAccess": true,
+      "status": "active",
+      "currentPatients": 2,
+      "notes": "Heat exhaustion case being treated. Walk-in available."
+    },
+    {
+      "id": "first-aid-l2",
+      "name": "First Aid Station — Concourse Level 2",
+      "location": "Section 136, near Gate D",
+      "type": "first-aid",
+      "staffed": true,
+      "medicalPersonnel": 3,
+      "ambulanceAccess": true,
+      "status": "active",
+      "currentPatients": 0,
+      "notes": "Fully available. No current wait."
+    },
+    {
+      "id": "medical-tent-plaza",
+      "name": "Medical Tent — Fan Plaza",
+      "location": "Fan Plaza, near the main entrance fountain",
+      "type": "triage",
+      "staffed": true,
+      "medicalPersonnel": 2,
+      "ambulanceAccess": false,
+      "status": "active",
+      "currentPatients": 1,
+      "notes": "Outdoor triage point. For minor issues only."
+    },
+    {
+      "id": "ambulance-bay",
+      "name": "Ambulance Bay — Emergency Vehicle Access",
+      "location": "Northwest service road, behind Gate A",
+      "type": "ambulance",
+      "staffed": true,
+      "medicalPersonnel": 6,
+      "ambulanceAccess": true,
+      "status": "active",
+      "currentPatients": 0,
+      "notes": "2 ambulances on standby. Direct route to Hackensack University Medical Center."
+    }
+  ],
+  "transit": [
+    {
+      "id": "metro-3",
+      "line": "Metro Line 3",
+      "mode": "metro",
+      "status": "on-time",
+      "nextArrival": "4 min",
+      "subsequentArrivals": ["12 min", "20 min"],
+      "loadPercent": 72,
+      "platform": "Platform 2",
+      "direction": "To Stadium",
+      "notes": "Running on schedule."
+    },
+    {
+      "id": "express-shuttle",
+      "line": "Express Shuttle",
+      "mode": "shuttle",
+      "status": "delayed",
+      "nextArrival": "11 min",
+      "subsequentArrivals": ["25 min", "38 min"],
+      "loadPercent": 88,
+      "platform": "Shuttle Bay A",
+      "direction": "To Stadium",
+      "notes": "Delayed due to traffic on Route 120. Enhanced service active."
+    },
+    {
+      "id": "bus-88",
+      "line": "Bus Route 88",
+      "mode": "bus",
+      "status": "on-time",
+      "nextArrival": "7 min",
+      "subsequentArrivals": ["19 min", "31 min"],
+      "loadPercent": 55,
+      "platform": "Bus Stop C",
+      "direction": "To Stadium",
+      "notes": "Running on schedule."
+    },
+    {
+      "id": "metro-7",
+      "line": "Metro Line 7",
+      "mode": "metro",
+      "status": "disrupted",
+      "nextArrival": "unknown",
+      "subsequentArrivals": ["unknown"],
+      "loadPercent": 95,
+      "platform": "Platform 5",
+      "direction": "To Stadium",
+      "notes": "Signal failure at Junction 4. Service suspended until further notice. Use Metro Line 3 or Express Shuttle instead."
+    }
+  ],
+  "restrooms": [
+    {
+      "id": "restroom-101",
+      "name": "Restroom Block 101",
+      "location": "Concourse L1, near Section 101",
+      "cleanlinessPercent": 88,
+      "status": "ok",
+      "waitMin": 1,
+      "notes": "Clean and available."
+    },
+    {
+      "id": "restroom-112",
+      "name": "Restroom Block 112",
+      "location": "Concourse L1, near Section 112",
+      "cleanlinessPercent": 41,
+      "status": "attention",
+      "waitMin": 5,
+      "notes": "Needs cleaning. Consider Block 124 instead."
+    },
+    {
+      "id": "restroom-124",
+      "name": "Restroom Block 124",
+      "location": "Concourse L1, near Section 124",
+      "cleanlinessPercent": 100,
+      "status": "ok",
+      "waitMin": 0,
+      "notes": "Fully clean, no wait. Recommended."
+    },
+    {
+      "id": "restroom-136",
+      "name": "Restroom Block 136",
+      "location": "Concourse L2, near Section 136",
+      "cleanlinessPercent": 0,
+      "status": "cleaning",
+      "waitMin": 10,
+      "notes": "Deep-clean in progress. Use Block 124 or Block 101."
+    }
+  ],
+  "concessions": [
+    {
+      "id": "concession-pitchside-grill",
+      "name": "Pitchside Grill",
+      "location": "Concourse L1, near Section 110",
+      "category": "food",
+      "waitMin": 4,
+      "queue": 12,
+      "open": true,
+      "notes": "Burgers, hot dogs, fries."
+    },
+    {
+      "id": "concession-global-eats",
+      "name": "Global Eats",
+      "location": "Concourse L1, near Section 118",
+      "category": "food",
+      "waitMin": 9,
+      "queue": 28,
+      "open": true,
+      "notes": "International cuisine — tacos, noodles, curry."
+    },
+    {
+      "id": "concession-hydration-station",
+      "name": "Hydration Station",
+      "location": "Concourse L1, near Section 105",
+      "category": "drink",
+      "waitMin": 2,
+      "queue": 5,
+      "open": true,
+      "notes": "Water, sports drinks, soda. Shortest wait."
+    },
+    {
+      "id": "concession-trophy-bar",
+      "name": "Trophy Bar",
+      "location": "Concourse L2, near Section 130",
+      "category": "drink",
+      "waitMin": 14,
+      "queue": 41,
+      "open": true,
+      "notes": "Full bar. Longest wait. Secondary vendor now open."
+    },
+    {
+      "id": "concession-official-store",
+      "name": "Official Store",
+      "location": "Fan Plaza, main entrance",
+      "category": "retail",
+      "waitMin": 11,
+      "queue": 33,
+      "open": true,
+      "notes": "Merchandise, jerseys, souvenirs."
+    }
+  ],
+  "emergency": {
+    "assemblyPoints": [
+      {
+        "id": "assembly-north",
+        "name": "Assembly Point — North",
+        "location": "North parking lot, behind Gate A"
+      },
+      {
+        "id": "assembly-south",
+        "name": "Assembly Point — South",
+        "location": "South parking lot, behind Gate C"
+      }
+    ],
+    "emergencyNumber": "911",
+    "stadiumSecurityNumber": "+1-201-555-0142",
+    "nearestHospital": "Hackensack University Medical Center",
+    "hospitalDistanceKm": 6.4,
+    "hospitalEtaMin": 12,
+    "evacuationNote": "In an emergency, follow the green exit signs and proceed to the nearest assembly point. Do not use elevators."
+  }
+}
