@@ -20,7 +20,7 @@ import { sanitizeUserInput } from './sanitize';
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
-const MODEL_NAME = 'gemini-1.5-flash';
+const MODEL_NAME = 'gemini-1.5-flash-latest';
 
 /** Fixed refusal reply for out-of-scope questions. */
 export const OUT_OF_SCOPE_REPLY =
