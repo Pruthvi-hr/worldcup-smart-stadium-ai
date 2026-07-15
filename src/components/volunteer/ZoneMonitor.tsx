@@ -5,20 +5,29 @@ import { Badge } from '../Badge';
 import { ProgressBar } from '../ProgressBar';
 import { stadiumZones, type StadiumZone } from '../../data/stadiumData';
 
+/** Maps zone status to badge tone and display label. */
 const STATUS_META: Record<StadiumZone['status'], { tone: 'field' | 'warning' | 'danger'; label: string }> = {
   calm: { tone: 'field', label: 'Calm' },
   busy: { tone: 'warning', label: 'Busy' },
   critical: { tone: 'danger', label: 'Critical' },
 };
 
+/**
+ * Displays stadium zone occupancy and temperature, with sort controls.
+ * Memoised to prevent unnecessary re-renders.
+ *
+ * @returns A section card listing zones with occupancy bars and sort toggles.
+ */
 function ZoneMonitorBase() {
   const [sortBy, setSortBy] = useState<'occupancy' | 'temp'>('occupancy');
 
+  // Sort zones by the selected metric (occupancy or temperature).
   const sorted = useMemo(
     () => [...stadiumZones].sort((a, b) => (sortBy === 'occupancy' ? b.occupancy - a.occupancy : b.tempC - a.tempC)),
     [sortBy],
   );
 
+  // Count zones at critical occupancy for the header badge.
   const criticalCount = useMemo(
     () => stadiumZones.filter((z) => z.status === 'critical').length,
     [],

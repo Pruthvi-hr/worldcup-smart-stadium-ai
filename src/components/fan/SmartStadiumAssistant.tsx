@@ -1,13 +1,26 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
-import { AlertTriangle, Bot, Send, ShieldCheck, Sparkles, X } from 'lucide-react';
-import { askAssistant, isAssistantConfigured, OUT_OF_SCOPE_REPLY, type AssistantMessage } from '../../lib/gemini';
+import { AlertTriangle, Bot, Brain, Send, ShieldCheck, Sparkles, X } from 'lucide-react';
+import {
+  askAssistant,
+  isAssistantConfigured,
+  OUT_OF_SCOPE_REPLY,
+  type AssistantMessage,
+  type ParsedAssistantResponse,
+} from '../../lib/gemini';
 
+/** A single chat bubble in the conversation thread. */
 interface ChatBubble {
+  /** Unique identifier for React keying. */
   id: string;
+  /** Who sent the message — user or the AI assistant. */
   role: 'user' | 'assistant';
+  /** The main message text shown in the bubble. */
   text: string;
+  /** Optional AI reasoning shown below the response (Explainable AI). */
+  reasoning?: string;
 }
 
+/** Suggested prompt buttons shown on first load to guide the user. */
 const SUGGESTED_PROMPTS = [
   'Which gate has the shortest wait?',
   'Where is the nearest first aid station?',
@@ -15,6 +28,7 @@ const SUGGESTED_PROMPTS = [
   'Which restroom is cleanest?',
 ] as const;
 
+/** Static greeting bubble shown when the conversation starts. */
 const GREETING: ChatBubble = {
   id: 'greeting',
   role: 'assistant',
@@ -26,6 +40,11 @@ const GREETING: ChatBubble = {
  * anti-hallucination guardrails via the system prompt (temperature 0.2,
  * JSON-only context). Shows dynamic loading state while fetching and
  * surfaces a user-friendly banner when no API key is configured.
+ *
+ * Explainable AI: The assistant renders a distinct "reasoning" badge below
+ * each AI response so users can see WHY a recommendation was made.
+ *
+ * @returns The Smart Stadium Assistant chat component.
  */
 export function SmartStadiumAssistant() {
   const [messages, setMessages] = useState<ChatBubble[]>([GREETING]);
@@ -44,6 +63,13 @@ export function SmartStadiumAssistant() {
     }
   }, [messages, loading]);
 
+  /**
+   * Send a message to the Gemini API and append the response to the chat.
+   * Handles errors gracefully by surfacing a fallback message in the chat
+   * and an error toast that the user can dismiss.
+   *
+   * @param overrideText - Optional text to send (used by suggested-prompt buttons).
+   */
   const handleSend = useCallback(
     async (overrideText?: string) => {
       const text = (overrideText ?? input).trim();
@@ -66,11 +92,16 @@ export function SmartStadiumAssistant() {
             text: m.text,
           }));
 
-        const reply = await askAssistant(history, text);
+        const parsed: ParsedAssistantResponse = await askAssistant(history, text);
 
         setMessages((prev) => [
           ...prev,
-          { id: crypto.randomUUID(), role: 'assistant', text: reply || OUT_OF_SCOPE_REPLY },
+          {
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            text: parsed.response || OUT_OF_SCOPE_REPLY,
+            reasoning: parsed.reasoning || undefined,
+          },
         ]);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Something went wrong reaching the assistant.';
@@ -90,6 +121,11 @@ export function SmartStadiumAssistant() {
     [input, loading, messages],
   );
 
+  /**
+   * Form submit handler — prevents default and delegates to handleSend.
+   *
+   * @param e - The form submission event.
+   */
   const handleSubmit = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -98,6 +134,7 @@ export function SmartStadiumAssistant() {
     [handleSend],
   );
 
+  /** Clear the error toast state. */
   const dismissError = useCallback(() => setError(null), []);
 
   return (
@@ -143,7 +180,7 @@ export function SmartStadiumAssistant() {
         </div>
       )}
 
-      {/* Message scroll area */}
+      {/* Message scroll area — aria-live="polite" for screen reader announcements */}
       <div
         ref={scrollRef}
         className="flex max-h-80 min-h-[200px] flex-col gap-3 overflow-y-auto p-5 scrollbar-thin"
@@ -154,18 +191,31 @@ export function SmartStadiumAssistant() {
         {messages.map((m) => (
           <article
             key={m.id}
-            className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'} flex-col`}
             aria-label={m.role === 'user' ? 'Your message' : 'Assistant response'}
           >
             <div
               className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                 m.role === 'user'
-                  ? 'bg-field-500 font-medium text-ink-950'
+                  ? 'self-end bg-field-500 font-medium text-ink-950'
                   : 'border border-ink-800 bg-ink-900/80 text-ink-100'
               }`}
             >
               {m.text}
             </div>
+
+            {/* Explainable AI: reasoning badge below the assistant response */}
+            {m.role === 'assistant' && m.reasoning && (
+              <div
+                className="mt-1.5 flex max-w-[85%] items-start gap-1.5 rounded-lg border border-aqua-500/20 bg-aqua-500/5 px-3 py-2"
+                aria-label="AI reasoning for this response"
+              >
+                <Brain className="mt-0.5 h-3.5 w-3.5 shrink-0 text-aqua-400" aria-hidden="true" />
+                <p className="text-xs italic leading-relaxed text-aqua-200">
+                  <span className="font-semibold not-italic">AI Reasoning:</span> {m.reasoning}
+                </p>
+              </div>
+            )}
           </article>
         ))}
 

@@ -5,18 +5,26 @@ import { Badge } from '../Badge';
 import { ProgressBar } from '../ProgressBar';
 import { transitRoutes, type TransitRoute } from '../../data/stadiumData';
 
+/** Maps transit mode to its icon component and display label. */
 const MODE_META: Record<TransitRoute['mode'], { icon: typeof Train; label: string }> = {
   metro: { icon: Train, label: 'Metro' },
   bus: { icon: Bus, label: 'Bus' },
   shuttle: { icon: TramFront, label: 'Shuttle' },
 };
 
+/** Maps transit status to badge tone. */
 const STATUS_TONE: Record<TransitRoute['status'], 'field' | 'warning' | 'danger'> = {
   'on-time': 'field',
   delayed: 'warning',
   disrupted: 'danger',
 };
 
+/**
+ * Displays transit routes serving the stadium, sorted by soonest arrival.
+ * Memoised to prevent unnecessary re-renders.
+ *
+ * @returns A section card listing transit routes with arrival times and load.
+ */
 function TransitPanelBase() {
   // Sort so the soonest-arriving, least-loaded route surfaces first.
   const sorted = useMemo(

@@ -1,17 +1,25 @@
 import { type ReactNode } from 'react';
+import PropTypes from 'prop-types';
 import { LogOut, Trophy } from 'lucide-react';
 import { useAuth } from '../auth/useAuth';
 import { Badge } from './Badge';
 
+/** Props for the AppShell component. */
 interface AppShellProps {
+  /** The page content rendered inside the main element. */
   children: ReactNode;
+  /** Text label for the current user role (e.g. "Fan Access"). */
   roleLabel: string;
+  /** Colour tone for the role badge in the nav bar. */
   roleTone: 'field' | 'aqua';
 }
 
 /**
  * Shared application chrome (skip link, top nav, branded header, footer)
  * wrapping both the Fan and Volunteer experiences.
+ *
+ * @param props - The AppShell component props.
+ * @returns The full page layout with navigation, main content, and footer.
  */
 export function AppShell({ children, roleLabel, roleTone }: AppShellProps) {
   const { user, logout } = useAuth();
@@ -81,3 +89,9 @@ export function AppShell({ children, roleLabel, roleTone }: AppShellProps) {
     </div>
   );
 }
+
+AppShell.propTypes = {
+  children: PropTypes.node.isRequired,
+  roleLabel: PropTypes.string.isRequired,
+  roleTone: PropTypes.oneOf(['field', 'aqua']).isRequired,
+};

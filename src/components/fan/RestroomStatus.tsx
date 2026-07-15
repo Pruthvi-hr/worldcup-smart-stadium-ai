@@ -5,12 +5,19 @@ import { Badge } from '../Badge';
 import { ProgressBar } from '../ProgressBar';
 import { restrooms } from '../../data/stadiumData';
 
+/** Maps restroom status to badge tone and display label. */
 const STATUS_META = {
   ok: { tone: 'field' as const, label: 'Clean' },
   attention: { tone: 'warning' as const, label: 'Needs Attention' },
   cleaning: { tone: 'aqua' as const, label: 'Cleaning' },
 };
 
+/**
+ * Displays restroom cleanliness status across all stadium blocks.
+ * Memoised to prevent unnecessary re-renders.
+ *
+ * @returns A section card listing restroom blocks with cleanliness bars.
+ */
 function RestroomStatusBase() {
   return (
     <SectionCard title="Restroom Status" icon={<ShowerHead className="h-4 w-4" />}>

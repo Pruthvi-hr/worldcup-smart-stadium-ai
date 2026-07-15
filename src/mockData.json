@@ -1,4 +1,13 @@
 {
+  "tournament": {
+    "name": "FIFA World Cup 2026",
+    "hosts": ["Canada", "Mexico", "USA"],
+    "totalMatches": 48,
+    "totalCities": 16,
+    "totalFans": 5400000,
+    "currentMatchday": 7,
+    "phase": "Group Stage"
+  },
   "stadium": {
     "name": "MetLife Stadium",
     "city": "New York / New Jersey",
@@ -35,20 +44,41 @@
       "openTurnstiles": 10,
       "totalTurnstiles": 12,
       "recommended": false,
-      "notes": "Steady flow. No immediate delays."
+      "notes": "Steady flow. No immediate delays.",
+      "languagesSupported": ["en", "es", "pt", "fr"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "audioAssistance": true,
+        "tactilePaving": true
+      }
     },
     {
       "id": "gate-b",
       "name": "Gate B — East",
-      "congestionPercent": 92,
+      "congestionPercent": 85,
       "status": "critical",
       "capacity": 9500,
-      "currentLoad": 8740,
+      "currentLoad": 8075,
       "avgEntryWaitMin": 18,
       "openTurnstiles": 8,
       "totalTurnstiles": 8,
       "recommended": false,
-      "notes": "Critical congestion. Redirect fans to Gate C or Gate D."
+      "notes": "Critical congestion at 85% capacity. Medical incident reported at Section 104. Spanish translator required for a family near turnstile 6. Redirect fans to Gate C or Gate D.",
+      "activeIncident": {
+        "type": "medical",
+        "location": "Section 104, near turnstile 6",
+        "description": "Fan experiencing dizziness, possible dehydration. Medical team dispatched. Spanish translator requested for family communication.",
+        "severity": "medium",
+        "status": "en-route",
+        "languagesNeeded": ["es"],
+        "reportedAt": "17:38"
+      },
+      "languagesSupported": ["en", "es"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "audioAssistance": false,
+        "tactilePaving": false
+      }
     },
     {
       "id": "gate-c",
@@ -61,7 +91,13 @@
       "openTurnstiles": 12,
       "totalTurnstiles": 12,
       "recommended": true,
-      "notes": "Best entry point. Shortest wait time."
+      "notes": "Best entry point. Shortest wait time. Multilingual staff available.",
+      "languagesSupported": ["en", "es", "pt", "fr", "ar", "de"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "audioAssistance": true,
+        "tactilePaving": true
+      }
     },
     {
       "id": "gate-d",
@@ -74,7 +110,13 @@
       "openTurnstiles": 10,
       "totalTurnstiles": 10,
       "recommended": true,
-      "notes": "Good alternative to Gate B. Moderate wait."
+      "notes": "Good alternative to Gate B. Moderate wait. Portuguese translator available.",
+      "languagesSupported": ["en", "es", "pt"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "audioAssistance": true,
+        "tactilePaving": false
+      }
     }
   ],
   "medical": [
@@ -88,7 +130,9 @@
       "ambulanceAccess": true,
       "status": "active",
       "currentPatients": 2,
-      "notes": "Heat exhaustion case being treated. Walk-in available."
+      "notes": "Heat exhaustion case being treated. Walk-in available. Spanish-speaking nurse on duty.",
+      "languagesAvailable": ["en", "es"],
+      "equipment": ["AED", "stretcher", "oxygen", "first-aid kit", "IV fluids"]
     },
     {
       "id": "first-aid-l2",
@@ -100,7 +144,9 @@
       "ambulanceAccess": true,
       "status": "active",
       "currentPatients": 0,
-      "notes": "Fully available. No current wait."
+      "notes": "Fully available. No current wait. Multilingual staff.",
+      "languagesAvailable": ["en", "es", "pt", "fr"],
+      "equipment": ["AED", "stretcher", "oxygen", "first-aid kit", "IV fluids"]
     },
     {
       "id": "medical-tent-plaza",
@@ -112,7 +158,9 @@
       "ambulanceAccess": false,
       "status": "active",
       "currentPatients": 1,
-      "notes": "Outdoor triage point. For minor issues only."
+      "notes": "Outdoor triage point. For minor issues only. Arabic-speaking medic available.",
+      "languagesAvailable": ["en", "ar"],
+      "equipment": ["first-aid kit", "oxygen"]
     },
     {
       "id": "ambulance-bay",
@@ -124,10 +172,41 @@
       "ambulanceAccess": true,
       "status": "active",
       "currentPatients": 0,
-      "notes": "2 ambulances on standby. Direct route to Hackensack University Medical Center."
+      "notes": "2 ambulances on standby. Direct route to Hackensack University Medical Center (12 min ETA).",
+      "languagesAvailable": ["en", "es"],
+      "equipment": ["full ambulance kit", "advanced life support"]
+    },
+    {
+      "id": "first-aid-block-104",
+      "name": "Rapid Response — Block 104 (Gate B)",
+      "location": "Section 104, near Gate B turnstile 6",
+      "type": "rapid-response",
+      "staffed": true,
+      "medicalPersonnel": 2,
+      "ambulanceAccess": false,
+      "status": "en-route",
+      "currentPatients": 0,
+      "notes": "Dispatched for medical incident at Gate B. Spanish translator requested. ETA 3 minutes.",
+      "languagesAvailable": ["en"],
+      "languagesNeeded": ["es"],
+      "equipment": ["first-aid kit", "AED", "oxygen"]
     }
   ],
   "transit": [
+    {
+      "id": "metro-1",
+      "line": "Metro Line 1",
+      "mode": "metro",
+      "status": "delayed",
+      "nextArrival": "15 min late",
+      "subsequentArrivals": ["22 min", "35 min"],
+      "loadPercent": 88,
+      "platform": "Platform 1",
+      "direction": "To Stadium",
+      "delayReason": "Signal failure at Junction 4. Service running at reduced frequency.",
+      "notes": "Delayed by 15 mins. Passengers advised to use Metro Line 3 or Express Shuttle. Spanish and Portuguese announcements active.",
+      "languagesAnnounced": ["en", "es", "pt"]
+    },
     {
       "id": "metro-3",
       "line": "Metro Line 3",
@@ -138,7 +217,9 @@
       "loadPercent": 72,
       "platform": "Platform 2",
       "direction": "To Stadium",
-      "notes": "Running on schedule."
+      "delayReason": null,
+      "notes": "Running on schedule. Best option for fans affected by Metro Line 1 delay.",
+      "languagesAnnounced": ["en", "es", "pt", "fr"]
     },
     {
       "id": "express-shuttle",
@@ -150,7 +231,9 @@
       "loadPercent": 88,
       "platform": "Shuttle Bay A",
       "direction": "To Stadium",
-      "notes": "Delayed due to traffic on Route 120. Enhanced service active."
+      "delayReason": "Traffic congestion on Route 120 near stadium approach.",
+      "notes": "Delayed due to traffic on Route 120. Enhanced service active — 3 additional shuttles deployed.",
+      "languagesAnnounced": ["en", "es"]
     },
     {
       "id": "bus-88",
@@ -162,7 +245,9 @@
       "loadPercent": 55,
       "platform": "Bus Stop C",
       "direction": "To Stadium",
-      "notes": "Running on schedule."
+      "delayReason": null,
+      "notes": "Running on schedule. Good alternative to Metro Line 1.",
+      "languagesAnnounced": ["en", "es"]
     },
     {
       "id": "metro-7",
@@ -174,7 +259,9 @@
       "loadPercent": 95,
       "platform": "Platform 5",
       "direction": "To Stadium",
-      "notes": "Signal failure at Junction 4. Service suspended until further notice. Use Metro Line 3 or Express Shuttle instead."
+      "delayReason": "Signal failure at Junction 4. Service suspended until further notice.",
+      "notes": "Service suspended. Use Metro Line 3 or Express Shuttle instead.",
+      "languagesAnnounced": ["en", "es", "pt", "fr", "ar"]
     }
   ],
   "restrooms": [
@@ -185,7 +272,11 @@
       "cleanlinessPercent": 88,
       "status": "ok",
       "waitMin": 1,
-      "notes": "Clean and available."
+      "notes": "Clean and available. Family restroom with baby changing facilities.",
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "familyRoom": true
+      }
     },
     {
       "id": "restroom-112",
@@ -194,7 +285,11 @@
       "cleanlinessPercent": 41,
       "status": "attention",
       "waitMin": 5,
-      "notes": "Needs cleaning. Consider Block 124 instead."
+      "notes": "Needs cleaning. Consider Block 124 instead. Cleaning crew dispatched.",
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "familyRoom": false
+      }
     },
     {
       "id": "restroom-124",
@@ -203,7 +298,11 @@
       "cleanlinessPercent": 100,
       "status": "ok",
       "waitMin": 0,
-      "notes": "Fully clean, no wait. Recommended."
+      "notes": "Fully clean, no wait. Recommended. Gender-neutral facilities available.",
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "familyRoom": true
+      }
     },
     {
       "id": "restroom-136",
@@ -212,7 +311,11 @@
       "cleanlinessPercent": 0,
       "status": "cleaning",
       "waitMin": 10,
-      "notes": "Deep-clean in progress. Use Block 124 or Block 101."
+      "notes": "Deep-clean in progress. Use Block 124 or Block 101.",
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "familyRoom": false
+      }
     }
   ],
   "concessions": [
@@ -224,7 +327,8 @@
       "waitMin": 4,
       "queue": 12,
       "open": true,
-      "notes": "Burgers, hot dogs, fries."
+      "notes": "Burgers, hot dogs, fries. Halal options available.",
+      "languagesOnMenu": ["en", "es", "pt", "ar"]
     },
     {
       "id": "concession-global-eats",
@@ -234,7 +338,8 @@
       "waitMin": 9,
       "queue": 28,
       "open": true,
-      "notes": "International cuisine — tacos, noodles, curry."
+      "notes": "International cuisine — tacos, noodles, curry. Vegetarian and vegan options.",
+      "languagesOnMenu": ["en", "es", "pt", "fr", "ar", "de"]
     },
     {
       "id": "concession-hydration-station",
@@ -244,7 +349,8 @@
       "waitMin": 2,
       "queue": 5,
       "open": true,
-      "notes": "Water, sports drinks, soda. Shortest wait."
+      "notes": "Water, sports drinks, soda. Shortest wait. Free water refill station.",
+      "languagesOnMenu": ["en", "es"]
     },
     {
       "id": "concession-trophy-bar",
@@ -254,7 +360,8 @@
       "waitMin": 14,
       "queue": 41,
       "open": true,
-      "notes": "Full bar. Longest wait. Secondary vendor now open."
+      "notes": "Full bar. Longest wait. Secondary vendor now open to reduce queue.",
+      "languagesOnMenu": ["en", "es", "pt", "fr"]
     },
     {
       "id": "concession-official-store",
@@ -264,20 +371,76 @@
       "waitMin": 11,
       "queue": 33,
       "open": true,
-      "notes": "Merchandise, jerseys, souvenirs."
+      "notes": "Merchandise, jerseys, souvenirs. Multilingual staff available.",
+      "languagesOnMenu": ["en", "es", "pt", "fr", "ar", "de"]
     }
   ],
+  "multilingual": {
+    "languagesSupported": ["en", "es", "pt", "fr", "ar", "de"],
+    "translationServices": {
+      "spanish": "Available at Gates A, C, D and all First Aid stations",
+      "portuguese": "Available at Gates C, D and First Aid L2",
+      "french": "Available at Gate C and First Aid L2",
+      "arabic": "Available at Medical Tent — Fan Plaza",
+      "german": "Available at Gate C and Official Store"
+    },
+    "urgentTranslationNeeded": {
+      "language": "es",
+      "location": "Gate B, Section 104, turnstile 6",
+      "reason": "Family of medical incident patient needs Spanish translator for communication with medical team.",
+      "status": "requested",
+      "translatorDispatched": false
+    }
+  },
+  "crowdManagement": {
+    "totalFansInStadium": 79200,
+    "flowRatePerMin": 850,
+    "peakEntryPeriod": "16:30 - 17:15",
+    "currentFlowDirection": "Concourse L1 → Seating",
+    "bottlenecks": [
+      {
+        "location": "Gate B — East",
+        "severity": "high",
+        "congestionPercent": 85,
+        "recommendation": "Redirect to Gate C (45% congestion, 3 min wait) or Gate D (61% congestion, 7 min wait). Medical incident at Section 104 requires clear path."
+      },
+      {
+        "location": "Concourse L1, near Section 112",
+        "severity": "medium",
+        "congestionPercent": 64,
+        "recommendation": "Open secondary corridor near Section 110 to relieve congestion."
+      }
+    ],
+    "diversionRoutes": [
+      {
+        "from": "Gate B",
+        "to": "Gate C",
+        "route": "East concourse → South corridor → Gate C entry",
+        "estimatedWalkTime": "8 min",
+        "benefit": "Reduces Gate B from 85% to safe levels. Avoids medical incident zone."
+      },
+      {
+        "from": "Gate B",
+        "to": "Gate D",
+        "route": "East concourse → West corridor → Gate D entry",
+        "estimatedWalkTime": "12 min",
+        "benefit": "Alternative if Gate C reaches capacity. Portuguese translator available."
+      }
+    ]
+  },
   "emergency": {
     "assemblyPoints": [
       {
         "id": "assembly-north",
         "name": "Assembly Point — North",
-        "location": "North parking lot, behind Gate A"
+        "location": "North parking lot, behind Gate A",
+        "capacity": 15000
       },
       {
         "id": "assembly-south",
         "name": "Assembly Point — South",
-        "location": "South parking lot, behind Gate C"
+        "location": "South parking lot, behind Gate C",
+        "capacity": 20000
       }
     ],
     "emergencyNumber": "911",
@@ -285,6 +448,31 @@
     "nearestHospital": "Hackensack University Medical Center",
     "hospitalDistanceKm": 6.4,
     "hospitalEtaMin": 12,
-    "evacuationNote": "In an emergency, follow the green exit signs and proceed to the nearest assembly point. Do not use elevators."
+    "evacuationNote": "In an emergency, follow the green exit signs and proceed to the nearest assembly point. Do not use elevators. Multilingual evacuation announcements available in EN, ES, PT, FR, AR.",
+    "activeEmergency": {
+      "type": "medical",
+      "location": "Gate B, Section 104",
+      "severity": "medium",
+      "status": "en-route",
+      "actionsTaken": [
+        "Medical team dispatched from First Aid L1",
+        "Spanish translator requested",
+        "Gate B crowd redirected to Gate C and Gate D",
+        "Clear path maintained for ambulance access"
+      ]
+    }
+  },
+  "accessibility": {
+    "wheelchairAccessibleGates": ["gate-a", "gate-c", "gate-d"],
+    "audioAssistanceGates": ["gate-a", "gate-c", "gate-d"],
+    "tactilePavingGates": ["gate-a", "gate-c"],
+    "sensoryQuietZone": {
+      "location": "Concourse L2, Room 204",
+      "capacity": 50,
+      "currentOccupancy": 12,
+      "notes": "Quiet space for fans with sensory sensitivities. Noise-cancelling headphones available."
+    },
+    "accessibleRestrooms": ["restroom-101", "restroom-124"],
+    "familyRestrooms": ["restroom-101", "restroom-124"]
   }
 }

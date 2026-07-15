@@ -1,13 +1,22 @@
 import { memo } from 'react';
+import PropTypes from 'prop-types';
 import { MapPin } from 'lucide-react';
 import { Badge } from '../Badge';
 import type { Match } from '../../data/stadiumData';
 
+/** Props for the MatchCard component. */
 interface MatchCardProps {
+  /** The match data to render. */
   match: Match;
 }
 
-/** Render a single fixture with live score / minute, memoised to avoid re-renders. */
+/**
+ * Render a single fixture with live score / minute, memoised to avoid
+ * unnecessary re-renders when the parent re-renders.
+ *
+ * @param props - The MatchCard component props.
+ * @returns An article element displaying the match fixture and score.
+ */
 function MatchCardBase({ match }: MatchCardProps) {
   const isLive = match.status === 'live';
 
@@ -66,5 +75,34 @@ function MatchCardBase({ match }: MatchCardProps) {
     </article>
   );
 }
+
+MatchCardBase.propTypes = {
+  match: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    stage: PropTypes.string.isRequired,
+    group: PropTypes.string.isRequired,
+    home: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      code: PropTypes.string.isRequired,
+      flag: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired,
+    }).isRequired,
+    away: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      code: PropTypes.string.isRequired,
+      flag: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired,
+    }).isRequired,
+    venue: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
+    kickoff: PropTypes.string.isRequired,
+    minute: PropTypes.number.isRequired,
+    status: PropTypes.oneOf(['upcoming', 'live', 'finished']).isRequired,
+    score: PropTypes.shape({
+      home: PropTypes.number.isRequired,
+      away: PropTypes.number.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 export const MatchCard = memo(MatchCardBase);

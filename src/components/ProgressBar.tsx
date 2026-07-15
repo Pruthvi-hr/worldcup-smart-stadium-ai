@@ -1,10 +1,18 @@
+import PropTypes from 'prop-types';
+
+/** Props for the ProgressBar component. */
 interface ProgressBarProps {
-  value: number; // 0-100
+  /** The progress value from 0 to 100. */
+  value: number;
+  /** Accessible label describing what the bar represents. */
   label: string;
+  /** Colour tone for the filled portion of the bar. */
   tone?: 'field' | 'aqua' | 'gold' | 'danger' | 'warning';
+  /** Whether to show the numeric percentage beside the label. */
   showValue?: boolean;
 }
 
+/** Maps tone keys to Tailwind background classes for the filled bar. */
 const TONE_BAR: Record<NonNullable<ProgressBarProps['tone']>, string> = {
   field: 'bg-field-500',
   aqua: 'bg-aqua-500',
@@ -16,6 +24,9 @@ const TONE_BAR: Record<NonNullable<ProgressBarProps['tone']>, string> = {
 /**
  * Accessible determinate progress bar with role="progressbar" and an
  * aria-valuenow/aria-valuemin/aria-valuemax triplet.
+ *
+ * @param props - The ProgressBar component props.
+ * @returns An accessible progress bar element.
  */
 export function ProgressBar({ value, label, tone = 'field', showValue = true }: ProgressBarProps) {
   const clamped = Math.max(0, Math.min(100, Math.round(value)));
@@ -41,3 +52,10 @@ export function ProgressBar({ value, label, tone = 'field', showValue = true }: 
     </div>
   );
 }
+
+ProgressBar.propTypes = {
+  value: PropTypes.number.isRequired,
+  label: PropTypes.string.isRequired,
+  tone: PropTypes.oneOf(['field', 'aqua', 'gold', 'danger', 'warning']),
+  showValue: PropTypes.bool,
+};

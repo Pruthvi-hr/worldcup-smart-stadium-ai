@@ -1,5 +1,5 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor, within, act } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Suspense } from 'react';
 
@@ -15,10 +15,12 @@ vi.mock('./lib/gemini', () => ({
   isAssistantConfigured: vi.fn(),
   OUT_OF_SCOPE_REPLY:
     'I am restricted to stadium safety and navigation operations. How can I assist you with your route today?',
+  parseAssistantResponse: vi.fn(),
 }));
 
 // Import the mocked functions so we can spy on them in tests.
 import { askAssistant, isAssistantConfigured } from './lib/gemini';
+import { sanitizeUserInput } from './lib/sanitize';
 import App from './App';
 import { AuthProvider } from './auth';
 import { CREDENTIALS } from './auth/types';
@@ -44,6 +46,11 @@ async function waitForFanDashboard() {
     },
     { timeout: 5000 },
   );
+}
+
+/** Build a mock ParsedAssistantResponse object. */
+function mockResponse(response, reasoning = '') {
+  return { response, reasoning };
 }
 
 // ---------------------------------------------------------------------------
@@ -241,15 +248,17 @@ describe('World Cup 2026 Smart Stadium — comprehensive test suite', () => {
   });
 
   // =========================================================================
-  // 4. AI CHAT DOM UPDATE — response appears in the DOM
+  // 4. AI CHAT DOM UPDATE — response and reasoning appear in the DOM
   // =========================================================================
   describe('4. AI chat correctly updates DOM on response', () => {
     it('renders the user message and AI response in the conversation log', async () => {
       isAssistantConfigured.mockReturnValue(true);
 
-      const aiResponse =
+      const aiText =
         'Gate C — South has the shortest wait at 3 minutes with 45% congestion. It is the recommended entry point.';
-      askAssistant.mockResolvedValue(aiResponse);
+      const aiReasoning =
+        'Routed away from Gate B to avoid 85% congestion. Gate C has 45% congestion and 3 min wait.';
+      askAssistant.mockResolvedValue(mockResponse(aiText, aiReasoning));
 
       const user = userEvent.setup();
       render(<App />);
@@ -271,7 +280,13 @@ describe('World Cup 2026 Smart Stadium — comprehensive test suite', () => {
 
       // The AI response should appear in the DOM.
       await waitFor(() => {
-        expect(screen.getByText(aiResponse)).toBeInTheDocument();
+        expect(screen.getByText(aiText)).toBeInTheDocument();
+      });
+
+      // The AI reasoning should appear in the DOM (Explainable AI).
+      await waitFor(() => {
+        expect(screen.getByText(/AI Reasoning:/i)).toBeInTheDocument();
+        expect(screen.getByText(aiReasoning)).toBeInTheDocument();
       });
 
       // Verify the API was called with the correct message.
@@ -288,7 +303,7 @@ describe('World Cup 2026 Smart Stadium — comprehensive test suite', () => {
       let resolveAI;
       askAssistant.mockReturnValue(
         new Promise((resolve) => {
-          resolveAI = () => resolve('Gate C — South has the shortest wait at 3 minutes.');
+          resolveAI = () => resolve(mockResponse('Gate C — South has the shortest wait at 3 minutes.'));
         }),
       );
 
@@ -324,8 +339,8 @@ describe('World Cup 2026 Smart Stadium — comprehensive test suite', () => {
     it('appends multiple messages to the conversation thread sequentially', async () => {
       isAssistantConfigured.mockReturnValue(true);
       askAssistant
-        .mockResolvedValueOnce('Gate C is recommended with a 3-minute wait.')
-        .mockResolvedValueOnce('The nearest first aid station is at Concourse Level 1, Section 112.');
+        .mockResolvedValueOnce(mockResponse('Gate C is recommended with a 3-minute wait.'))
+        .mockResolvedValueOnce(mockResponse('The nearest first aid station is at Concourse Level 1, Section 112.'));
 
       const user = userEvent.setup();
       render(<App />);
@@ -366,12 +381,8 @@ describe('World Cup 2026 Smart Stadium — comprehensive test suite', () => {
   // =========================================================================
   describe('5. Security — no hardcoded API keys or secrets', () => {
     it('the gemini utility reads the API key from import.meta.env, not a hardcoded string', async () => {
-      // Read the source of the gemini module to verify it references the env var.
-      // This is a source-level security check.
       const geminiSource = await vi.importActual('./lib/gemini');
 
-      // The module should export the expected functions (it loaded without
-      // a hardcoded key, meaning it relies on env injection at runtime).
       expect(geminiSource.askAssistant).toBeDefined();
       expect(geminiSource.isAssistantConfigured).toBeDefined();
       expect(geminiSource.OUT_OF_SCOPE_REPLY).toContain('restricted to stadium safety');
@@ -379,7 +390,7 @@ describe('World Cup 2026 Smart Stadium — comprehensive test suite', () => {
 
     it('the Smart Stadium Assistant does not embed any API key in the rendered DOM', async () => {
       isAssistantConfigured.mockReturnValue(true);
-      askAssistant.mockResolvedValue('Test response');
+      askAssistant.mockResolvedValue(mockResponse('Test response'));
 
       const { container } = render(
         <AuthProvider>
@@ -401,56 +412,63 @@ describe('World Cup 2026 Smart Stadium — comprehensive test suite', () => {
     });
 
     it('the Login component does not hardcode passwords in its source — credentials come from the types module', async () => {
-      // The Login component should reference CREDENTIALS from the types module,
-      // not inline password strings. The CREDENTIALS are demo-only values
-      // defined in one place (types.ts), not scattered as hardcoded literals.
       const loginSource = Login.toString();
 
-      // The Login component should reference the CREDENTIALS import, not
-      // contain raw password literals like "Fan123" or "Vol123".
       expect(loginSource).not.toContain('Fan123');
       expect(loginSource).not.toContain('Vol123');
-
-      // It should reference the imported CREDENTIALS object.
       expect(loginSource).toContain('CREDENTIALS');
     });
 
     it('the .env file structure explicitly references VITE_GEMINI_API_KEY (not a hardcoded key value)', async () => {
-      // Read .env as text and verify it declares the env var with an empty
-      // or placeholder value — never a real key.
       const fs = await import('node:fs');
       const path = await import('node:path');
       const envPath = path.resolve(process.cwd(), '.env');
       const envContent = fs.readFileSync(envPath, 'utf-8');
 
-      // The env var must be declared.
       expect(envContent).toContain('VITE_GEMINI_API_KEY');
 
-      // Extract ONLY the Gemini key's value (not the Supabase key).
       const match = envContent.match(/^VITE_GEMINI_API_KEY\s*=\s*(.*)$/m);
       expect(match).not.toBeNull();
       const value = match[1].trim();
 
-      // The value should be empty or a short placeholder — never a real key.
-      // A real Google API key starts with "AIza" and is ~39 chars.
       if (value.length > 0) {
         expect(value).not.toMatch(/^AIza[0-9A-Za-z_\-]{35}$/);
-        // Only flag values that look like real secrets (long alphanumeric).
-        // Short placeholders like "your_key_here" are acceptable.
         if (/^[A-Za-z0-9_\-]{30,}$/.test(value)) {
           throw new Error(`VITE_GEMINI_API_KEY appears to contain a real secret value (${value.length} chars).`);
         }
       }
     });
+
+    it('sanitizes user input by stripping HTML tags and script content', () => {
+      const malicious = '<script>alert("xss")</script>Which gate?';
+      const sanitized = sanitizeUserInput(malicious);
+      expect(sanitized).not.toContain('<script>');
+      expect(sanitized).not.toContain('alert');
+      expect(sanitized).toContain('Which gate?');
+
+      const withHtml = '<b>Gate</b> <img src=x onerror="steal()"> C?';
+      const clean = sanitizeUserInput(withHtml);
+      expect(clean).not.toContain('<b>');
+      expect(clean).not.toContain('<img');
+      expect(clean).not.toContain('onerror');
+      expect(clean).toContain('Gate');
+      expect(clean).toContain('C?');
+
+      const empty = sanitizeUserInput('');
+      expect(empty).toBe('');
+
+      const nullish = sanitizeUserInput(null);
+      expect(nullish).toBe('');
+    });
   });
 
   // =========================================================================
-  // 6. AUTH FLOW — login routing correctness (bonus integration test)
+  // 6. AUTH FLOW — login routing correctness
   // =========================================================================
   describe('6. Auth routing — dynamic role-based rendering', () => {
     it('renders the FanDashboard when fan credentials are used', async () => {
       isAssistantConfigured.mockReturnValue(true);
-      askAssistant.mockResolvedValue('Test');
+      askAssistant.mockResolvedValue(mockResponse('Test'));
 
       const user = userEvent.setup();
       render(<App />);
@@ -458,7 +476,6 @@ describe('World Cup 2026 Smart Stadium — comprehensive test suite', () => {
       await loginAsFan(user);
       await waitForFanDashboard();
 
-      // Fan-specific content should be visible.
       expect(screen.getByText(/Your matchday, made effortless/i)).toBeInTheDocument();
       expect(screen.getByText("Today's Fixtures")).toBeInTheDocument();
     });
@@ -478,8 +495,58 @@ describe('World Cup 2026 Smart Stadium — comprehensive test suite', () => {
         { timeout: 5000 },
       );
 
-      // Volunteer-specific content.
       expect(screen.getByText('Incident Command Board')).toBeInTheDocument();
+    });
+  });
+
+  // =========================================================================
+  // 7. 500 INTERNAL SERVER ERROR — graceful fallback (NEW)
+  // =========================================================================
+  describe('7. 500 Internal Server Error — graceful fallback', () => {
+    it('displays a graceful fallback message when the Gemini API returns a 500 error', async () => {
+      isAssistantConfigured.mockReturnValue(true);
+      askAssistant.mockRejectedValue(new Error('500 Internal Server Error: The server encountered an unexpected condition.'));
+
+      const user = userEvent.setup();
+      render(<App />);
+
+      await loginAsFan(user);
+      await waitForFanDashboard();
+
+      const input = screen.getByLabelText('Type your question for the Smart Stadium Assistant');
+      await user.type(input, 'Which gate should I use?');
+      await user.click(screen.getByRole('button', { name: 'Send message to assistant' }));
+
+      // The fallback message should appear — the app did NOT crash.
+      await waitFor(() => {
+        expect(screen.getByText(/I could not retrieve an answer just now/i)).toBeInTheDocument();
+      });
+
+      // The error toast should display the 500 error text.
+      expect(screen.getByText(/500 Internal Server Error/i)).toBeInTheDocument();
+
+      // The user's question should still be visible in the chat log.
+      expect(screen.getByText('Which gate should I use?')).toBeInTheDocument();
+
+      // The assistant heading should still be present — no crash.
+      expect(screen.getByText('Smart Stadium Assistant')).toBeInTheDocument();
+    });
+
+    it('verifies the AI chat response container uses aria-live="polite"', async () => {
+      isAssistantConfigured.mockReturnValue(true);
+      askAssistant.mockResolvedValue(mockResponse('Test response'));
+
+      render(
+        <AuthProvider>
+          <Suspense fallback={<div>Loading</div>}>
+            <SmartStadiumAssistant />
+          </Suspense>
+        </AuthProvider>,
+      );
+
+      // The conversation container must have aria-live="polite" for screen readers.
+      const logRegion = screen.getByRole('log', { name: 'Assistant conversation' });
+      expect(logRegion).toHaveAttribute('aria-live', 'polite');
     });
   });
 });

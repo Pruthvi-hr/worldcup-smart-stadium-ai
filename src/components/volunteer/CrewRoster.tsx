@@ -4,6 +4,7 @@ import { SectionCard } from '../SectionCard';
 import { Badge } from '../Badge';
 import { volunteers, type Volunteer } from '../../data/stadiumData';
 
+/** Maps volunteer status to badge tone, indicator dot class, and label. */
 const STATUS_META: Record<
   Volunteer['status'],
   { tone: 'field' | 'warning' | 'ink'; dot: string; label: string }
@@ -13,7 +14,14 @@ const STATUS_META: Record<
   offline: { tone: 'ink', dot: 'bg-ink-500', label: 'Offline' },
 };
 
+/**
+ * Displays the volunteer crew roster, sorted by status (active first).
+ * Memoised to prevent unnecessary re-renders.
+ *
+ * @returns A section card listing volunteers with status indicators.
+ */
 function CrewRosterBase() {
+  // Sort volunteers so active crew appear first, then on-break, then offline.
   const sorted = useMemo(
     () => [...volunteers].sort((a, b) => {
       const order: Record<Volunteer['status'], number> = { active: 0, break: 1, offline: 2 };
@@ -22,6 +30,7 @@ function CrewRosterBase() {
     [],
   );
 
+  // Summarise active vs total volunteer counts for the header badge.
   const summary = useMemo(
     () => ({
       active: volunteers.filter((v) => v.status === 'active').length,
