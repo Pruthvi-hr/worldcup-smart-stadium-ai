@@ -4,6 +4,10 @@ import { SectionCard } from '../SectionCard';
 import { Badge } from '../Badge';
 import { concessions, type Concession } from '../../data/stadiumData';
 
+/**
+ * Maps concession category to its icon component, display label, and icon class.
+ * @internal
+ */
 const CATEGORY_META: Record<
   Concession['category'],
   { icon: typeof Coffee; label: string; iconClass: string }
@@ -17,6 +21,8 @@ const CATEGORY_META: Record<
  * Lets a fan pick a category and instantly see the best (shortest-wait)
  * concession for that category. Memoised filtering + sorting keeps the
  * derived list stable across unrelated re-renders.
+ *
+ * @returns A section card with category filters and a sorted concession list.
  */
 export function Wayfinder() {
   const [category, setCategory] = useState<Concession['category'] | 'all'>('all');

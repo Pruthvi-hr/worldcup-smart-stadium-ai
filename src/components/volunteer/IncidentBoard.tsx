@@ -15,6 +15,10 @@ import { SectionCard } from '../SectionCard';
 import { Badge } from '../Badge';
 import { initialIncidents, type Incident } from '../../data/stadiumData';
 
+/**
+ * Maps incident type to its icon component, display label, and icon class.
+ * @internal
+ */
 const TYPE_META: Record<
   Incident['type'],
   { icon: typeof HeartPulse; label: string; iconClass: string }
@@ -25,12 +29,20 @@ const TYPE_META: Record<
   crowd: { icon: Users, label: 'Crowd', iconClass: 'bg-gold-500/15 text-gold-300' },
 };
 
+/**
+ * Maps incident severity to badge tone.
+ * @internal
+ */
 const SEVERITY_TONE: Record<Incident['severity'], 'field' | 'warning' | 'danger'> = {
   low: 'field',
   medium: 'warning',
   high: 'danger',
 };
 
+/**
+ * Maps incident status to badge tone, display label, and the next lifecycle state.
+ * @internal
+ */
 const STATUS_META: Record<
   Incident['status'],
   { tone: 'ink' | 'warning' | 'field' | 'aqua'; label: string; next: Incident['status'] | null }
@@ -44,6 +56,8 @@ const STATUS_META: Record<
  * Incident command board. Volunteers can advance an incident through its
  * lifecycle (open → en-route → resolved). State is local to this component
  * so the simulation is self-contained.
+ *
+ * @returns A section card with status filters and a list of incident cards.
  */
 function IncidentBoardBase() {
   const [incidents, setIncidents] = useState<Incident[]>(initialIncidents);

@@ -4,6 +4,7 @@
  * the simulation feels cohesive. Live values are layered on top at runtime.
  */
 
+/** A football fixture/match in the tournament schedule. */
 export interface Match {
   id: string;
   stage: string;
@@ -60,6 +61,7 @@ export const matches: Match[] = [
   },
 ];
 
+/** A monitored zone/area within the stadium. */
 export interface StadiumZone {
   id: string;
   name: string;
@@ -78,6 +80,7 @@ export const stadiumZones: StadiumZone[] = [
   { id: 'z6', name: 'Fan Plaza', occupancy: 81, capacity: 20000, tempC: 24, status: 'busy' },
 ];
 
+/** A concession stand (food, drink, or retail). */
 export interface Concession {
   id: string;
   name: string;
@@ -94,6 +97,7 @@ export const concessions: Concession[] = [
   { id: 'c5', name: 'Official Store', waitMin: 11, queue: 33, category: 'retail' },
 ];
 
+/** A restroom block with cleanliness status. */
 export interface Restroom {
   id: string;
   name: string;
@@ -108,6 +112,7 @@ export const restrooms: Restroom[] = [
   { id: 'r4', name: 'Block 136', cleanliness: 0, status: 'cleaning' },
 ];
 
+/** An operational incident tracked by the volunteer command node. */
 export interface Incident {
   id: string;
   type: 'medical' | 'security' | 'facility' | 'crowd';
@@ -157,6 +162,7 @@ export const initialIncidents: Incident[] = [
   },
 ];
 
+/** A volunteer crew member. */
 export interface Volunteer {
   id: string;
   name: string;
@@ -174,6 +180,7 @@ export const volunteers: Volunteer[] = [
   { id: 'v6', name: 'Emma Schmidt', zone: 'Concourse L2', status: 'offline', role: 'Wayfinder' },
 ];
 
+/** A transit route serving the stadium. */
 export interface TransitRoute {
   id: string;
   line: string;
@@ -190,6 +197,7 @@ export const transitRoutes: TransitRoute[] = [
   { id: 't4', line: 'Metro Line 7', mode: 'metro', status: 'disrupted', nextArrival: '—', load: 95 },
 ];
 
+/** A news feed item shown in the live ticker. */
 export interface NewsItem {
   id: string;
   category: 'match' | 'stadium' | 'transit' | 'fan';

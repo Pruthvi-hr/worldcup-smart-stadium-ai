@@ -1,10 +1,16 @@
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import PropTypes from 'prop-types';
 import { AuthContext, type AuthContextValue } from './AuthContext';
 import { CREDENTIALS, type Role, type User } from './types';
 
 const STORAGE_KEY = 'wc2026.auth.user';
 
-/** Build a User object from a matched credential set. */
+/**
+ * Build a {@link User} object from a matched credential set.
+ *
+ * @param role - The role to construct the user for.
+ * @returns A fully populated User with a fresh session id.
+ */
 function buildUser(role: Role): User {
   const c = CREDENTIALS[role];
   return {
@@ -16,7 +22,11 @@ function buildUser(role: Role): User {
   };
 }
 
-/** Read a persisted session (if any) on initial mount. */
+/**
+ * Read a persisted session from localStorage (if any) on initial mount.
+ *
+ * @returns The deserialised User, or null if none / invalid.
+ */
 function readPersistedUser(): User | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -33,6 +43,9 @@ interface AuthProviderProps {
 /**
  * Provides authentication state to the app. A user is dynamically routed to
  * either the Fan or Volunteer experience based on the credentials supplied.
+ *
+ * @param props - The {@link AuthProviderProps}.
+ * @returns The AuthContext provider wrapping the given children.
  */
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(() => readPersistedUser());
@@ -72,3 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

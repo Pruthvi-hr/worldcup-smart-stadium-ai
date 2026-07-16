@@ -21,6 +21,8 @@ import { useAuth } from '../../auth/useAuth';
 /**
  * Volunteer command-node: incident triage, zone monitoring, crew coordination,
  * and broadcast messaging. Live KPIs tick to simulate a real-time operations feed.
+ *
+ * @returns The full volunteer command dashboard wrapped in an AppShell.
  */
 export function VolunteerCommandNode() {
   const { user } = useAuth();

@@ -15,6 +15,8 @@ import { useAuth } from '../../auth/useAuth';
 /**
  * Fan-facing experience: wayfinding, live match, amenities, and transit.
  * Live KPIs tick on an interval to simulate a real-time data feed.
+ *
+ * @returns The full fan dashboard wrapped in an AppShell.
  */
 export function FanDashboard() {
   const { user } = useAuth();
@@ -67,9 +69,13 @@ export function FanDashboard() {
   );
 
   // No-op handler kept stable with useCallback for the quick-action buttons.
-  const handleQuickAction = useCallback((label: string) => {
-    // In a full build this would open a modal with turn-by-turn directions.
-    void label;
+  /**
+   * Quick-action click handler. In a full build this would open a modal
+   * with turn-by-turn directions.
+   *
+   * @param label - The label of the clicked quick-action button.
+   */
+  const handleQuickAction = useCallback((_label: string) => {
   }, []);
 
   return (

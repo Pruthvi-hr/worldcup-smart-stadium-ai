@@ -5,7 +5,10 @@ import { Badge } from '../Badge';
 import { ProgressBar } from '../ProgressBar';
 import { stadiumZones, type StadiumZone } from '../../data/stadiumData';
 
-/** Maps zone status to badge tone and display label. */
+/**
+ * Maps zone status to badge tone and display label.
+ * @internal
+ */
 const STATUS_META: Record<StadiumZone['status'], { tone: 'field' | 'warning' | 'danger'; label: string }> = {
   calm: { tone: 'field', label: 'Calm' },
   busy: { tone: 'warning', label: 'Busy' },

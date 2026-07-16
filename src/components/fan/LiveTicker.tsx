@@ -12,6 +12,8 @@ const CATEGORY_COLOR: Record<NewsItem['category'], string> = {
 /**
  * Horizontally scrolling live-update ticker. Duplicates its content so the
  * CSS keyframe loop is seamless. Pauses on hover/keyboard focus.
+ *
+ * @returns A scrolling ticker element showing live stadium updates.
  */
 export function LiveTicker() {
   const [items, setItems] = useState<NewsItem[]>(newsFeed);

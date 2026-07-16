@@ -3,6 +3,7 @@ import { Megaphone, Send } from 'lucide-react';
 import { SectionCard } from '../SectionCard';
 import { Badge } from '../Badge';
 
+/** A single broadcast message in the console feed. */
 interface Broadcast {
   id: string;
   channel: string;
@@ -21,6 +22,8 @@ const CHANNELS = ['All Gates', 'Medical', 'Concourse', 'Fan Plaza', 'Transit'] a
 /**
  * Volunteer broadcast / messaging console. Messages are kept in local state;
  * new broadcasts prepend to the feed. Inputs are fully labelled.
+ *
+ * @returns A section card with a message composer and a recent-broadcast feed.
  */
 function BroadcastConsoleBase() {
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>(SEED_BROADCASTS);

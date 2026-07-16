@@ -4,7 +4,10 @@ import { SectionCard } from '../SectionCard';
 import { Badge } from '../Badge';
 import { volunteers, type Volunteer } from '../../data/stadiumData';
 
-/** Maps volunteer status to badge tone, indicator dot class, and label. */
+/**
+ * Maps volunteer status to badge tone, indicator dot class, and label.
+ * @internal
+ */
 const STATUS_META: Record<
   Volunteer['status'],
   { tone: 'field' | 'warning' | 'ink'; dot: string; label: string }

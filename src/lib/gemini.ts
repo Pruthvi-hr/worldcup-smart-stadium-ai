@@ -192,7 +192,11 @@ export async function askAssistant(history: AssistantMessage[], message: string)
   return parseAssistantResponse(text);
 }
 
-/** Whether a Gemini API key has been configured. */
+/**
+ * Whether a Gemini API key has been configured.
+ *
+ * @returns True if the VITE_GEMINI_API_KEY env var is set and non-empty.
+ */
 export function isAssistantConfigured(): boolean {
   return Boolean(API_KEY && API_KEY.length > 0);
 }

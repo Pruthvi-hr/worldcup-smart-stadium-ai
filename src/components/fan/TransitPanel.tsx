@@ -5,14 +5,20 @@ import { Badge } from '../Badge';
 import { ProgressBar } from '../ProgressBar';
 import { transitRoutes, type TransitRoute } from '../../data/stadiumData';
 
-/** Maps transit mode to its icon component and display label. */
+/**
+ * Maps transit mode to its icon component and display label.
+ * @internal
+ */
 const MODE_META: Record<TransitRoute['mode'], { icon: typeof Train; label: string }> = {
   metro: { icon: Train, label: 'Metro' },
   bus: { icon: Bus, label: 'Bus' },
   shuttle: { icon: TramFront, label: 'Shuttle' },
 };
 
-/** Maps transit status to badge tone. */
+/**
+ * Maps transit status to badge tone.
+ * @internal
+ */
 const STATUS_TONE: Record<TransitRoute['status'], 'field' | 'warning' | 'danger'> = {
   'on-time': 'field',
   delayed: 'warning',

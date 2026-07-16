@@ -4,6 +4,10 @@ import { SectionCard } from '../SectionCard';
 import { Badge } from '../Badge';
 import { stadiumZones, type StadiumZone } from '../../data/stadiumData';
 
+/**
+ * Maps zone status to badge tone, display label, and indicator dot class.
+ * @internal
+ */
 const STATUS_META: Record<
   StadiumZone['status'],
   { tone: 'field' | 'warning' | 'danger'; label: string; dot: string }
@@ -13,7 +17,11 @@ const STATUS_META: Record<
   critical: { tone: 'danger', label: 'Critical', dot: 'bg-danger-400' },
 };
 
-/** Simplified top-down stadium occupancy map. */
+/**
+ * Simplified top-down stadium occupancy map.
+ *
+ * @returns A section card with a pitch diagram and per-zone occupancy list.
+ */
 function StadiumMapBase() {
   const totalOccupancy = useMemo(
     () => Math.round(

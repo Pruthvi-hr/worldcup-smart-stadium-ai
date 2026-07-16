@@ -11,4 +11,8 @@ export interface AuthContextValue {
   logout: () => void;
 }
 
+/**
+ * React context holding the current authentication state.
+ * Consumers read this via the {@link useAuth} hook.
+ */
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
