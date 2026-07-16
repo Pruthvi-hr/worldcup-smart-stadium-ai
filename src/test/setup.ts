@@ -2,6 +2,10 @@ import '@testing-library/jest-dom/vitest';
 import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 
+// Ensure the Gemini utility sees a configured API key in the test environment
+// so getModel() doesn't throw before reaching the mocked SDK.
+vi.stubEnv('VITE_GEMINI_API_KEY', 'test-api-key');
+
 // Tear down the DOM between every test to keep isolation tight.
 afterEach(() => {
   cleanup();
