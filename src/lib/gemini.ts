@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import mockData from '../mockData.json';
-import { sanitizeUserInput } from './sanitize';
+import { sanitizeUserInput, sanitizeAIResponse } from './sanitize';
 
 /**
  * Utility layer for the Smart Stadium Assistant.
@@ -145,8 +145,8 @@ export function parseAssistantResponse(rawText: string): ParsedAssistantResponse
       typeof parsed.response === 'string'
     ) {
       return {
-        response: parsed.response,
-        reasoning: typeof parsed.reasoning === 'string' ? parsed.reasoning : '',
+        response: sanitizeAIResponse(parsed.response),
+        reasoning: typeof parsed.reasoning === 'string' ? sanitizeAIResponse(parsed.reasoning) : '',
       };
     }
   } catch {

@@ -72,6 +72,10 @@ export function Login() {
         <div className="absolute left-1/2 top-1/3 h-72 w-72 -translate-x-1/2 rounded-full bg-gold-500/10 blur-3xl" />
       </div>
 
+      <header className="relative z-10 sr-only">
+        <h1>Smart Stadium Operations Platform — Sign In</h1>
+      </header>
+
       <main className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center gap-10 px-6 py-12 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
         {/* Brand / hero panel */}
         <section className="max-w-lg animate-fade-up text-center lg:text-left" aria-labelledby="hero-title">
@@ -235,6 +239,10 @@ export function Login() {
           </div>
         </section>
       </main>
+
+      <footer className="relative z-10 border-t border-ink-800/50 px-4 py-4 text-center text-xs text-ink-500">
+        <p>World Cup 2026 Smart Stadium Operations Platform — Demo build.</p>
+      </footer>
     </div>
   );
 }

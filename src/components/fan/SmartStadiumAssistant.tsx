@@ -201,7 +201,13 @@ export function SmartStadiumAssistant() {
                   : 'border border-ink-800 bg-ink-900/80 text-ink-100'
               }`}
             >
-              {m.text}
+              {m.role === 'assistant' ? (
+                <div
+                  dangerouslySetInnerHTML={{ __html: m.text }}
+                />
+              ) : (
+                m.text
+              )}
             </div>
 
             {/* Explainable AI: reasoning badge below the assistant response */}
